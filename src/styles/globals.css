@@ -1,0 +1,123 @@
+@import "./variables.css";
+
+/* Reset-ish */
+* { box-sizing: border-box; }
+html,body,#root { height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg-900), var(--bg-800));
+  color: var(--text-100);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden; /* we'll manage scrolling areas manually */
+
+  scrollbar-width: thin;
+  scrollbar-color: #7a5bff rgba(255,255,255,0.05);
+}
+
+/* App layout helpers */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Main area */
+.main-area {
+  display: grid;
+  grid-template-columns: 1fr clamp(220px, 30vw, 360px);
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 64px - 64px); /* top navbar + bottom bar height */
+}
+
+/* sliders */
+.control {
+  margin: 12px 0;
+}
+.control label { display:block; font-size: 13px; color: var(--muted-200); margin-bottom: 6px; }
+.control input[type="range"] { width: 100%; }
+
+/* control buttons and small util */
+.btn {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--text-100);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  outline: none;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--accent-glow); }
+.btn.primary {
+  background: linear-gradient(180deg, var(--accent-500), var(--accent-400));
+  color: white;
+  box-shadow: var(--accent-glow);
+  border: none;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+  padding: 12px 20px;
+  z-index: 30;
+}
+
+.scroll {
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-top: 8px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6b4cff, #9a5cff);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7b5cff, #b06cff);
+}
+
+
+
+/* Responsive fallback */
+@media (max-width: 450px) {
+  body {
+    overflow: auto; /* enable global scroll */
+  }
+
+  .main-area {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    height: auto; /* remove fixed height so page can scroll */
+  }
+
+  .atom-side {
+    order: 2;
+    height: 40vh;
+    overflow: auto; /* optional: keep independent scrolling */
+  }
+
+  .viewer {
+    order: 1;
+    height: 60vh;
+  }
+}

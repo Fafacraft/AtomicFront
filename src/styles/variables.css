@@ -1,0 +1,22 @@
+:root{
+  /* Base palette (deep -> lighter) */
+  --bg-900: #05060b;    /* almost black-blue */
+  --bg-800: #0b1530;    /* deep navy */
+  --bg-700: #0f2347;
+  --bg-600: #122a5a;
+  --accent-500: #6c4cff; /* purple highlight */
+  --accent-400: #8d6bff;
+  --accent-300: #9fb0ff; /* light bluish */
+  --glass: rgba(255,255,255,0.04);
+
+  /* text */
+  --text-100: #e6eefc;
+  --muted-200: #9fb0d9;
+
+  /* UI */
+  --panel: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --shadow: 0 8px 24px rgba(2,8,23,0.6);
+  --radius: 10px;
+  --accent-glow: 0 6px 30px rgba(108,76,255,0.18);
+  --transition: 200ms cubic-bezier(.2,.9,.2,1);
+}

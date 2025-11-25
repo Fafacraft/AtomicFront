@@ -1,0 +1,117 @@
+
+
+/* Right sidebar */
+.atom-side {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  height: auto;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition);
+}
+
+
+/* Header */
+.atom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.atom-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-400, #9b7fff);
+}
+
+
+/* Data rows */
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-weight: 500;
+  color: var(--muted-200, #aaaaff);
+}
+
+.value {
+  font-weight: 600;
+  color: var(--text-100, #ffffff);
+}
+
+/* Controls */
+.controls {
+  margin-top: 12px;
+}
+
+.control {
+  margin-bottom: 12px;
+}
+
+.control label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted-200, #aaaaff);
+  margin-bottom: 4px;
+}
+
+.control input[type="range"] {
+  width: 100%;
+}
+
+/* Buttons */
+.control-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn:hover {
+  background-color: var(--accent-500, #7f5fff);
+}
+
+/* Separator */
+.separator {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 16px 0;
+}
+
+/* Computed section */
+.computed-title {
+  font-size: 13px;
+  color: var(--muted-200, #aaaaff);
+  margin-bottom: 8px;
+}
+
+/* Notes */
+.notes {
+  margin-top: 14px;
+}
+
+.notes-title {
+  font-size: 13px;
+  color: var(--muted-200, #aaaaff);
+  margin-bottom: 8px;
+}
+
+.notes-content {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted-200, #aaaaff);
+}
+
+.notes-spacer {
+  height: 600px; /* temporary for scrollbar demo */
+}
+
+
