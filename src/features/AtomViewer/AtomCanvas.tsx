@@ -1,31 +1,97 @@
-import React, { useRef, useEffect } from "react";
-import "./AtomCanvas.css";
+import React, { useRef, useEffect, useState } from "react";
+import * as THREE from "three";
 
-
-/**
- * Minimal placeholder for the Three.js canvas.
- * Later you'll replace the internal code with your initScene / renderer.
- */
 const AtomCanvas: React.FC = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // Placeholder background / demo glow so it doesn't look empty before Three.js
-    const el = ref.current;
-    if (!el) return;
-    el.style.background = "radial-gradient(circle at 35% 30%, rgba(140,100,255,0.08), transparent 15%), radial-gradient(circle at 70% 70%, rgba(70,120,255,0.06), transparent 20%)";
-    el.style.width = "100%";
-    el.style.height = "100%";
-  }, []);
+    const mount = mountRef.current;
+    if (!mount) return;
 
+    
+      var width = mount.clientWidth;
+      var height = window.innerHeight * 0.6;
+      if (window.innerWidth < 450) {
+        width = window.innerWidth * 0.925;
+        height = window.innerHeight * 0.6;
+      }
+
+    // Scene
+    const scene = new THREE.Scene();
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      width / height,
+      0.1,
+      1000
+    );
+    camera.position.z = 5;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0x111111, 1);
+
+    mount.appendChild(renderer.domElement);
+
+    // Red Sphere
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const material = new THREE.MeshStandardMaterial({ color: "#ff3b3b" });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    // Light
+    const light = new THREE.AmbientLight(0xffffff, 2);
+    light.position.set(0, 0, 10);
+    scene.add(light);
+
+    // Animation
+    const animate = () => {
+      sphere.rotation.y += 0.01;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+    setLoaded(true);
+
+    // Resize handler
+    const handleResize = () => {
+      if (!mount) return;
+
+      var width = mount.clientWidth * 0.98;
+      var height = window.innerHeight * 0.6;
+      if (window.innerWidth < 450) {
+        width = window.innerWidth * 0.925;
+        height = window.innerHeight * 0.6;
+      }
+
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      renderer.dispose();
+      geometry.dispose();
+      material.dispose();
+
+      // remove duplicated canvas from dev mode hot reloads
+      if (renderer.domElement && mount.contains(renderer.domElement)) {
+        mount.removeChild(renderer.domElement);
+      }
+    };
+  }, []);
+  
   return (
     <div className="viewer">
-      {/* Put the canvas element inside when you integrate Three.js */}
-      <div ref={ref} style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center", color: "var(--muted-200)" }}>
-          <div style={{ fontSize: 18, fontWeight: 600, color: "var(--accent-300)" }}>Atom Viewer</div>
-          <div style={{ marginTop: 8, fontSize: 13 }}>Three.js canvas placeholder</div>
-        </div>
+      <div className="canvas-container" ref={mountRef}>
       </div>
     </div>
   );

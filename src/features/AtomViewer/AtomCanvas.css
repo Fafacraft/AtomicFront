@@ -1,45 +1,39 @@
-/* Viewer wrapper (flex container for canvas) */
-.viewer {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px; /* fallback height */
-  position: relative;
-}
-
-/* Canvas container with placeholder background */
 .canvas-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
-/* Radial gradients for placeholder glow */
-.canvas-placeholder-bg {
+/* Placeholder overlay */
+.canvas-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   background: radial-gradient(circle at 35% 30%, rgba(140,100,255,0.08), transparent 15%),
               radial-gradient(circle at 70% 70%, rgba(70,120,255,0.06), transparent 20%);
+
+  color: var(--muted-200);
+  z-index: 5;
+  animation: fadein 0.3s ease-out;
 }
 
-/* Centered placeholder text */
-.canvas-placeholder-text {
-  text-align: center;
-  color: var(--muted-200, #aaaaff);
-}
-
-/* Title text */
 .canvas-title {
   font-size: 18px;
   font-weight: 600;
-  color: var(--accent-300, #b9aaff);
+  color: var(--accent-300);
 }
 
-/* Subtitle text */
 .canvas-subtitle {
-  margin-top: 8px;
   font-size: 13px;
-  color: var(--muted-200, #aaaaff);
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+@keyframes fadeout {
+  to { opacity: 0; }
 }
