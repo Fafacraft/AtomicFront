@@ -76,7 +76,7 @@ const AtomCanvas: React.FC = () => {
     controls.enablePan = true;
     controls.enableZoom = true;
     controls.minDistance = 1;
-    controls.maxDistance = 20;
+    controls.maxDistance = 200;
     controls.autoRotate = autoRotateEnabled;
     controls.autoRotateSpeed = 1;
     controls.target.set(0, 0, 0);
@@ -86,20 +86,25 @@ const AtomCanvas: React.FC = () => {
     const orbitalMat = new THREE.MeshBasicMaterial({
       color: 0x3399ff,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.1,
       depthWrite: false,
     });
 
     // Generate the atom
     generateNucleus(scene, proton, neutron);
+    camera.position.multiplyScalar(0.5); // zoom in on nucleus
 
-    if (electron > 0) {
+    if (electron >= 1) {
+      camera.position.multiplyScalar(2); // zoom out 1s shell
       generateFirstShell(scene, electron, 1.5, orbitalMat);
     }
-    if (electron > 2) {
-      camera.position.multiplyScalar(2.5); // zoom out 20%
+    if (electron >= 3) {
+      camera.position.multiplyScalar(2.5); // zoom out 2s shells
       controls.update();
       generateSecondShell(scene, electron, 4, orbitalMat);
+      if (electron >= 5) {
+        camera.position.multiplyScalar(2.5); // zoom out 2p shells
+      }
     }
 
     // Animation
