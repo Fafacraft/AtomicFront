@@ -42,10 +42,20 @@
   color: var(--muted-200, #aaaaff);
 }
 
-.value {
-  font-weight: 600;
-  color: var(--text-100, #ffffff);
+.value-input {
+  width: 60px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 4px 6px;
+  color: var(--text-100);
+  text-align: right;
+  margin-left: 5px;
 }
+.value-input:focus {
+  outline: 1px solid var(--accent-400);
+}
+
 
 /* Controls */
 .controls {
@@ -113,5 +123,4 @@
 .notes-spacer {
   height: 600px; /* temporary for scrollbar demo */
 }
-
 

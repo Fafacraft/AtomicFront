@@ -60,7 +60,7 @@ const AtomCanvas: React.FC = () => {
     mount.appendChild(renderer.domElement);
 
     // Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     const spotLight = new THREE.SpotLight(0xffffff, 150);
     spotLight.position.set(0, 0, 10);
     scene.add(ambientLight);
