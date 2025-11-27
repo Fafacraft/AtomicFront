@@ -8,7 +8,8 @@ const AtomDataSide: React.FC = () => {
   const [onSimulate, setOnSimulate] = useState<() => void>();
   const [uiProtonText, setUiProtonText] = useState(1);
   const [uiNeutronText, setUiNeutronText] = useState(1);
-  const { proton, setProton, neutron, setNeutron } = useAtomData();
+  const [uiElectronText, setUiElectronText] = useState(1);
+  const { proton, setProton, neutron, setNeutron, electron, setElectron } = useAtomData();
 
   useEffect(() => {
     const handler = setTimeout(() => setProton(uiProtonText), 300);
@@ -19,6 +20,11 @@ const AtomDataSide: React.FC = () => {
     const handler = setTimeout(() => setNeutron(uiNeutronText), 300);
     return () => clearTimeout(handler);
   }, [uiNeutronText]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setElectron(uiElectronText), 300);
+    return () => clearTimeout(handler);
+  }, [uiElectronText]);
 
   return (
     <aside className="atom-side">
@@ -37,7 +43,7 @@ const AtomDataSide: React.FC = () => {
         </div>
         <div className="data-row">
           <div className="label">Electrons</div>
-          <div className="value">{electrons}</div>
+          <div className="value">{uiElectronText}</div>
         </div>
 
         <div className="controls">
@@ -64,8 +70,8 @@ const AtomDataSide: React.FC = () => {
             label="Electrons"
             min={0}
             max={118}
-            value={electrons}
-            onChange={setElectrons}
+            value={uiElectronText}
+            onChange={setUiElectronText}
           />
 
           <div className="control-buttons">

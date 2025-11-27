@@ -14,6 +14,7 @@ const AtomCanvas: React.FC = () => {
   // Get proton count from context
   const proton = useAtomData().proton;
   const neutron = useAtomData().neutron;
+  const electron = useAtomData().electron;
 
   // Handle window resize by triggering a reload of the scene
   useEffect(() => {
@@ -30,7 +31,7 @@ const AtomCanvas: React.FC = () => {
     if (loaded) {
       setReload((prev) => prev + 1);
     }
-  }, [proton, neutron, loaded]);
+  }, [proton, neutron, electron, loaded]);
 
   // Loading and setting up the scene
   useEffect(() => {
@@ -79,7 +80,20 @@ const AtomCanvas: React.FC = () => {
     controls.target.set(0, 0, 0);
     controls.update();
 
+    // Orbital material
+    const orbitalMat = new THREE.MeshBasicMaterial({
+      color: 0x3399ff,
+      transparent: true,
+      opacity: 0.15,
+      depthWrite: false,
+    });
+
+    // Generate the atom
     generateNucleus();
+
+    if (electron > 0) {
+      generateFirstShell(1.5, orbitalMat);
+    }
 
     // Animation
     const animate = () => {
@@ -153,6 +167,22 @@ const AtomCanvas: React.FC = () => {
         sphere.position.set(...pos);
         scene.add(sphere);
       });
+    }
+
+    function generateFirstShell(orbitalRadius: number, orbitalMat: THREE.Material) {
+      if (electron <= 0) {
+        return;
+      } else if (electron == 1) {
+        orbitalMat.opacity = 0.1;
+      } else {
+        orbitalMat.opacity = 0.2;
+      }
+
+      // 1s Orbital
+      const obital1SGeo = new THREE.SphereGeometry(orbitalRadius, 64, 64);
+      const orbital1SMesh = new THREE.Mesh(obital1SGeo, orbitalMat);
+      orbital1SMesh.renderOrder = 1; // helps transparency
+      scene.add(orbital1SMesh);
     }
 
     // Function to get view size
