@@ -5,6 +5,7 @@ import { generateNucleus, generateNucleusPositions } from "../../engine/visuals/
 import { useAtomData } from "../../contexts/AtomDataContext";
 import { generateFirstShell } from "../../engine/visuals/atoms/electron_shells/firstShell";
 import { generateSecondShell } from "../../engine/visuals/atoms/electron_shells/secondShell";
+import { generateThirdShell } from "../../engine/visuals/atoms/electron_shells/thirdShell";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -63,7 +64,7 @@ const AtomCanvas: React.FC = () => {
     mount.appendChild(renderer.domElement);
 
     // Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     const spotLight = new THREE.SpotLight(0xffffff, 150);
     spotLight.position.set(0, 0, 10);
     scene.add(ambientLight);
@@ -106,6 +107,15 @@ const AtomCanvas: React.FC = () => {
         camera.position.multiplyScalar(2.5); // zoom out 2p shells
       }
     }
+    if (electron >= 11) {
+      camera.position.multiplyScalar(1.5); // zoom out 3s shells
+      controls.update();
+      generateThirdShell(scene, electron, 15, orbitalMat);
+      if (electron >= 13) {
+        camera.position.multiplyScalar(2.5); // zoom out 3p shells
+      }
+    }
+
 
     // Animation
     const animate = () => {

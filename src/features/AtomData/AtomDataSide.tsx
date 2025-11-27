@@ -51,7 +51,7 @@ const AtomDataSide: React.FC = () => {
             id="protons"
             label="Protons"
             min={0}
-            max={118}
+            max={18}
             value={uiProtonText}
             onChange={setUiProtonText}
           />
@@ -60,7 +60,7 @@ const AtomDataSide: React.FC = () => {
             id="neutrons"
             label="Neutrons"
             min={0}
-            max={118}
+            max={18}
             value={uiNeutronText}
             onChange={setUiNeutronText}
           />
@@ -69,7 +69,7 @@ const AtomDataSide: React.FC = () => {
             id="electrons"
             label="Electrons"
             min={0}
-            max={118}
+            max={18}
             value={uiElectronText}
             onChange={setUiElectronText}
           />

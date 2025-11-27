@@ -18,7 +18,7 @@ function addPOrbital(
         mesh.renderOrder = 2;
 
         // Stretch the sphere along the axis
-        mesh.scale.set(0.6, 0.6, 1.5);
+        mesh.scale.set(0.8, 0.8, 1.3);
 
         // Translate geometry so bottom touches nucleus
         mesh.geometry.translate(0, 0, radius * 0.55);
