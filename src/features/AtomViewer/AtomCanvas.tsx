@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState, use } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { generateNucleus, generateNucleusPositions } from "../../engine/atoms/NucleusEngine";
+import { generateNucleus, generateNucleusPositions } from "../../engine/visuals/atoms/NucleusEngine";
 import { useAtomData } from "../../contexts/AtomDataContext";
-import { generateFirstShell } from "../../engine/atoms/electron_shells/firstShell";
+import { generateFirstShell } from "../../engine/visuals/atoms/electron_shells/firstShell";
+import { generateSecondShell } from "../../engine/visuals/atoms/electron_shells/secondShell";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -94,6 +95,11 @@ const AtomCanvas: React.FC = () => {
 
     if (electron > 0) {
       generateFirstShell(scene, electron, 1.5, orbitalMat);
+    }
+    if (electron > 2) {
+      camera.position.multiplyScalar(2.5); // zoom out 20%
+      controls.update();
+      generateSecondShell(scene, electron, 4, orbitalMat);
     }
 
     // Animation

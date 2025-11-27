@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { add } from "three/tsl";
+import { addSOrbitals } from "../electron_orbitals/SOrbitals";
 
 // Function to generate first electron shell (1s orbital)
 function generateFirstShell(scene: THREE.Scene, electron: number, orbitalRadius: number, orbitalMat: THREE.Material) {
@@ -11,10 +13,7 @@ function generateFirstShell(scene: THREE.Scene, electron: number, orbitalRadius:
       }
 
       // 1s Orbital
-      const obital1SGeo = new THREE.SphereGeometry(orbitalRadius, 64, 64);
-      const orbital1SMesh = new THREE.Mesh(obital1SGeo, orbitalMat);
-      orbital1SMesh.renderOrder = 1; // helps transparency
-      scene.add(orbital1SMesh);
+      addSOrbitals(scene, orbitalRadius, orbitalMat);
     }
     
 export { generateFirstShell };
