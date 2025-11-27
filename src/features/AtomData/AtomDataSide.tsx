@@ -1,26 +1,32 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import "./AtomDataSide.css";
+import { useAtomData } from "../../contexts/AtomDataContext";
 
 
-type Props = {
-  protons: number;
-  neutrons: number;
-  electrons: number;
-  setProtons: (n: number) => void;
-  setNeutrons: (n: number) => void;
-  setElectrons: (n: number) => void;
-  onSimulate?: () => void;
-};
 
-const AtomDataSide: React.FC<Props> = ({
-  protons,
-  neutrons,
-  electrons,
-  setProtons,
-  setNeutrons,
-  setElectrons,
-  onSimulate
-}) => {
+const AtomDataSide: React.FC = () => {
+  const [electrons, setElectrons] = React.useState(1);
+  const [onSimulate, setOnSimulate] = React.useState<() => void>();
+  const [uiProtonText, setUiProtonText] = React.useState(1);
+  const [uiNeutronText, setUiNeutronText] = React.useState(1);
+  const { proton, setProton, neutron, setNeutron } = useAtomData(); 
+
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setProton(uiProtonText); // default neutral atom
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [uiProtonText]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setNeutron(uiNeutronText); // default neutral atom
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [uiNeutronText]);
+
+
   return (
     <aside className="atom-side">
       <div className="atom-header">
@@ -30,11 +36,11 @@ const AtomDataSide: React.FC<Props> = ({
       <div className="scroll">
         <div className="data-row">
           <div className="label">Protons</div>
-          <div className="value">{protons}</div>
+          <div className="value">{uiProtonText}</div>
         </div>
         <div className="data-row">
           <div className="label">Neutrons</div>
-          <div className="value">{neutrons}</div>
+          <div className="value">{uiNeutronText}</div>
         </div>
         <div className="data-row">
           <div className="label">Electrons</div>
@@ -43,24 +49,24 @@ const AtomDataSide: React.FC<Props> = ({
 
         <div className="controls">
           <div className="control">
-            <label>Protons: {protons}</label>
+            <label>Protons: {uiProtonText}</label>
             <input
               type="range"
               min={0}
               max={118}
-              value={protons}
-              onChange={e => setProtons(parseInt(e.target.value))}
+              value={uiProtonText}
+              onChange={e => setUiProtonText(parseInt(e.target.value))}
             />
           </div>
 
           <div className="control">
-            <label>Neutrons: {neutrons}</label>
+            <label>Neutrons: {uiNeutronText}</label>
             <input
               type="range"
               min={0}
-              max={200}
-              value={neutrons}
-              onChange={e => setNeutrons(parseInt(e.target.value))}
+              max={118}
+              value={uiNeutronText}
+              onChange={e => setUiNeutronText(parseInt(e.target.value))}
             />
           </div>
 

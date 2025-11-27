@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState, use } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { generateNucleusPositions } from "../../engine/NucleusEngine";
+import { useAtomData } from "../../contexts/AtomDataContext";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -8,6 +10,10 @@ const AtomCanvas: React.FC = () => {
   const [autoRotateEnabled, setAutoRotateEnabled] = useState(true);
   const autoRotateEnabledRef = useRef(autoRotateEnabled); // ref to hold the latest auto-rotate state
   const [reload, setReload] = useState(0); // state to trigger reloads
+
+  // Get proton count from context
+  const proton = useAtomData().proton;
+  const neutron = useAtomData().neutron;
 
   // Handle window resize by triggering a reload of the scene
   useEffect(() => {
@@ -19,6 +25,12 @@ const AtomCanvas: React.FC = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (loaded) {
+      setReload((prev) => prev + 1);
+    }
+  }, [proton, neutron, loaded]);
 
   // Loading and setting up the scene
   useEffect(() => {
@@ -48,8 +60,8 @@ const AtomCanvas: React.FC = () => {
     mount.appendChild(renderer.domElement);
 
     // Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.15);
-    const spotLight = new THREE.SpotLight(0xffffff, 100);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+    const spotLight = new THREE.SpotLight(0xffffff, 150);
     spotLight.position.set(0, 0, 10);
     scene.add(ambientLight);
     scene.add(spotLight);
@@ -67,11 +79,7 @@ const AtomCanvas: React.FC = () => {
     controls.target.set(0, 0, 0);
     controls.update();
 
-    // Red Sphere
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const material = new THREE.MeshStandardMaterial({ color: "#ff3b3b" });
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
+    generateNucleus();
 
     // Animation
     const animate = () => {
@@ -93,8 +101,6 @@ const AtomCanvas: React.FC = () => {
     return () => {
       // Clean up
       renderer.dispose();
-      geometry.dispose();
-      material.dispose();
 
       // remove duplicated canvas from dev mode hot reloads
       if (renderer.domElement && mount.contains(renderer.domElement)) {
@@ -102,7 +108,54 @@ const AtomCanvas: React.FC = () => {
       }
     };
 
+    // Function to generate nucleus particles
+    function generateNucleus() {
+      const N = proton + neutron;
+      const particleRadius = 0.1;
 
+      // get positions for N particles
+      const positions = generateNucleusPositions(N, particleRadius);
+
+      let protonRemaining = proton;
+      let neutronRemaining = neutron;
+      let protonProportion = proton / N;
+      let neutronProportion = neutron / N;
+
+      // for each position, create a proton or neutron sphere
+      positions.forEach((pos, i) => {
+        // Decide type based on which is closer to running out
+        let type: "proton" | "neutron";
+        if (protonRemaining === 0) type = "neutron";
+        else if (neutronRemaining === 0) type = "proton";
+        else {
+          // alternate or balance: pick the type with fewer used so far
+          const usedProtons = proton - protonRemaining;
+          const usedNeutrons = neutron - neutronRemaining;
+          const useProtonsProportion = usedProtons / proton;
+          const useNeutronsProportion = usedNeutrons / neutron;
+          type = protonProportion / useProtonsProportion >= neutronProportion / useNeutronsProportion ? "proton" : "neutron";
+        }
+
+        if (type === "proton") protonRemaining--;
+        else neutronRemaining--;
+
+        // Create sphere with color based on type
+        const material = type === "proton"
+          ? new THREE.MeshStandardMaterial({ color: "#ff3b3b" })
+          : new THREE.MeshStandardMaterial({ color: "#8d8d8d" });
+
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(particleRadius, 16, 16),
+          material
+        );
+
+        // Set position and add to scene
+        sphere.position.set(...pos);
+        scene.add(sphere);
+      });
+    }
+
+    // Function to get view size
     function getViewSize(mount: HTMLDivElement) {
       var width = mount.clientWidth;
       var height = window.innerHeight * 0.6;
