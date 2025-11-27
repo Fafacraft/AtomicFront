@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState, use } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { generateNucleusPositions } from "../../engine/NucleusEngine";
+import { generateNucleus, generateNucleusPositions } from "../../engine/atoms/NucleusEngine";
 import { useAtomData } from "../../contexts/AtomDataContext";
+import { generateFirstShell } from "../../engine/atoms/electron_shells/firstShell";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -89,10 +90,10 @@ const AtomCanvas: React.FC = () => {
     });
 
     // Generate the atom
-    generateNucleus();
+    generateNucleus(scene, proton, neutron);
 
     if (electron > 0) {
-      generateFirstShell(1.5, orbitalMat);
+      generateFirstShell(scene, electron, 1.5, orbitalMat);
     }
 
     // Animation
@@ -104,7 +105,6 @@ const AtomCanvas: React.FC = () => {
         controls.autoRotate = false;
       }
       controls.update();
-      console.log("Auto-rotate:", autoRotateEnabled);
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
@@ -122,68 +122,6 @@ const AtomCanvas: React.FC = () => {
       }
     };
 
-    // Function to generate nucleus particles
-    function generateNucleus() {
-      const N = proton + neutron;
-      const particleRadius = 0.1;
-
-      // get positions for N particles
-      const positions = generateNucleusPositions(N, particleRadius);
-
-      let protonRemaining = proton;
-      let neutronRemaining = neutron;
-      let protonProportion = proton / N;
-      let neutronProportion = neutron / N;
-
-      // for each position, create a proton or neutron sphere
-      positions.forEach((pos, i) => {
-        // Decide type based on which is closer to running out
-        let type: "proton" | "neutron";
-        if (protonRemaining === 0) type = "neutron";
-        else if (neutronRemaining === 0) type = "proton";
-        else {
-          // alternate or balance: pick the type with fewer used so far
-          const usedProtons = proton - protonRemaining;
-          const usedNeutrons = neutron - neutronRemaining;
-          const useProtonsProportion = usedProtons / proton;
-          const useNeutronsProportion = usedNeutrons / neutron;
-          type = protonProportion / useProtonsProportion >= neutronProportion / useNeutronsProportion ? "proton" : "neutron";
-        }
-
-        if (type === "proton") protonRemaining--;
-        else neutronRemaining--;
-
-        // Create sphere with color based on type
-        const material = type === "proton"
-          ? new THREE.MeshStandardMaterial({ color: "#ff3b3b" })
-          : new THREE.MeshStandardMaterial({ color: "#8d8d8d" });
-
-        const sphere = new THREE.Mesh(
-          new THREE.SphereGeometry(particleRadius, 16, 16),
-          material
-        );
-
-        // Set position and add to scene
-        sphere.position.set(...pos);
-        scene.add(sphere);
-      });
-    }
-
-    function generateFirstShell(orbitalRadius: number, orbitalMat: THREE.Material) {
-      if (electron <= 0) {
-        return;
-      } else if (electron == 1) {
-        orbitalMat.opacity = 0.1;
-      } else {
-        orbitalMat.opacity = 0.2;
-      }
-
-      // 1s Orbital
-      const obital1SGeo = new THREE.SphereGeometry(orbitalRadius, 64, 64);
-      const orbital1SMesh = new THREE.Mesh(obital1SGeo, orbitalMat);
-      orbital1SMesh.renderOrder = 1; // helps transparency
-      scene.add(orbital1SMesh);
-    }
 
     // Function to get view size
     function getViewSize(mount: HTMLDivElement) {
