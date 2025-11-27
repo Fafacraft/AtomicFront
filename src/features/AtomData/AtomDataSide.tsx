@@ -1,31 +1,24 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
-
-
+import RangeControl from "../../components/slider";
 
 const AtomDataSide: React.FC = () => {
-  const [electrons, setElectrons] = React.useState(1);
-  const [onSimulate, setOnSimulate] = React.useState<() => void>();
-  const [uiProtonText, setUiProtonText] = React.useState(1);
-  const [uiNeutronText, setUiNeutronText] = React.useState(1);
-  const { proton, setProton, neutron, setNeutron } = useAtomData(); 
-
+  const [electrons, setElectrons] = useState(1);
+  const [onSimulate, setOnSimulate] = useState<() => void>();
+  const [uiProtonText, setUiProtonText] = useState(1);
+  const [uiNeutronText, setUiNeutronText] = useState(1);
+  const { proton, setProton, neutron, setNeutron } = useAtomData();
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setProton(uiProtonText); // default neutral atom
-    }, 300);
+    const handler = setTimeout(() => setProton(uiProtonText), 300);
     return () => clearTimeout(handler);
   }, [uiProtonText]);
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setNeutron(uiNeutronText); // default neutral atom
-    }, 300);
+    const handler = setTimeout(() => setNeutron(uiNeutronText), 300);
     return () => clearTimeout(handler);
   }, [uiNeutronText]);
-
 
   return (
     <aside className="atom-side">
@@ -48,41 +41,37 @@ const AtomDataSide: React.FC = () => {
         </div>
 
         <div className="controls">
-          <div className="control">
-            <label>Protons: {uiProtonText}</label>
-            <input
-              type="range"
-              min={0}
-              max={118}
-              value={uiProtonText}
-              onChange={e => setUiProtonText(parseInt(e.target.value))}
-            />
-          </div>
+          <RangeControl
+            id="protons"
+            label="Protons"
+            min={0}
+            max={118}
+            value={uiProtonText}
+            onChange={setUiProtonText}
+          />
 
-          <div className="control">
-            <label>Neutrons: {uiNeutronText}</label>
-            <input
-              type="range"
-              min={0}
-              max={118}
-              value={uiNeutronText}
-              onChange={e => setUiNeutronText(parseInt(e.target.value))}
-            />
-          </div>
+          <RangeControl
+            id="neutrons"
+            label="Neutrons"
+            min={0}
+            max={118}
+            value={uiNeutronText}
+            onChange={setUiNeutronText}
+          />
 
-          <div className="control">
-            <label>Electrons: {electrons}</label>
-            <input
-              type="range"
-              min={0}
-              max={118}
-              value={electrons}
-              onChange={e => setElectrons(parseInt(e.target.value))}
-            />
-          </div>
+          <RangeControl
+            id="electrons"
+            label="Electrons"
+            min={0}
+            max={118}
+            value={electrons}
+            onChange={setElectrons}
+          />
 
           <div className="control-buttons">
-            <button className="btn" onClick={() => onSimulate?.()}>Refresh</button>
+            <button className="btn" onClick={() => onSimulate?.()}>
+              Refresh
+            </button>
             <button className="btn">Export</button>
           </div>
         </div>
@@ -109,8 +98,8 @@ const AtomDataSide: React.FC = () => {
         <div className="notes">
           <div className="notes-title">Notes</div>
           <div className="notes-content">
-            This area will show calculated properties, electron shell helpers, and AI info.
-            Scroll independently while the 3D view stays fixed.
+            This area will show calculated properties, electron shell helpers,
+            and AI info. Scroll independently while the 3D view stays fixed.
           </div>
           <div className="notes-spacer" />
         </div>
