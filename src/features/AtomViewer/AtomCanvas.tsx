@@ -10,6 +10,8 @@ import { generateFourthShell } from "../../engine/visuals/atoms/electron_shells/
 import { generateFifthShell } from "../../engine/visuals/atoms/electron_shells/fifthShell";
 import ToggleBtn from "../../components/ToggleBtn";
 import "./AtomCanvas.css";
+import { generateSixthShell } from "../../engine/visuals/atoms/electron_shells/sixthShell";
+import { generateSeventhShell } from "../../engine/visuals/atoms/electron_shells/seventhShell.tsx";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +95,7 @@ const AtomCanvas: React.FC = () => {
     controls.enablePan = true;
     controls.enableZoom = true;
     controls.minDistance = 1;
-    controls.maxDistance = 2000;
+    controls.maxDistance = 20000;
     controls.autoRotate = autoRotateEnabled;
     controls.autoRotateSpeed = 1;
     controls.target.set(0, 0, 0);
@@ -149,8 +151,21 @@ const AtomCanvas: React.FC = () => {
         camera.position.set(0, 0, 1700); // zoom out 5p shells
       }
     }
+    if (electron >= 54) {
+      camera.position.set(0, 0, 2000); // zoom out 6s shells
+      generateSixthShell(scene, electron, 300, orbitalMat, shellVisibility, subVisibility);
+      if (electron >= 71) {
+        camera.position.set(0, 0, 3000); // zoom out 5d shells
+      }
+      if (electron >= 81) {
+        camera.position.set(0, 0, 5000); // zoom out 6p shells
+      }
+    }
+    if (electron >=87) {
+      camera.position.set(0, 0, 10000); // zoom out 7s shells
+      generateSeventhShell(scene, electron, 800, orbitalMat, shellVisibility, subVisibility)
+    }
 
-    // sixth and seventh shells to be added later
 
     // Animation
     const animate = () => {
