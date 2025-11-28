@@ -27,19 +27,19 @@ function generateSecondShell(scene: THREE.Scene, electron: number, orbitalRadius
         if (electron >= 8) {
           PxOrbitalMat.opacity = 0.3;
         }
-        addPOrbital(scene, orbitalRadius, PxOrbitalMat, new THREE.Vector3(1, 0, 0));
+        addPOrbital(scene, orbitalRadius, PxOrbitalMat, new THREE.Vector3(0, 1, 0));
       }
       if (electron >= 6) {
         if (electron >= 9) {
           PyOrbitalMat.opacity = 0.3;
         }
-        addPOrbital(scene, orbitalRadius, PyOrbitalMat, new THREE.Vector3(0, 1, 0));
+        addPOrbital(scene, orbitalRadius, PyOrbitalMat, new THREE.Vector3(0, 0, 1));
       }
       if (electron >= 7) {
         if (electron >= 10) {
           PzOrbitalMat.opacity = 0.3;
         }
-        addPOrbital(scene, orbitalRadius, PzOrbitalMat, new THREE.Vector3(0, 0, 1));
+        addPOrbital(scene, orbitalRadius, PzOrbitalMat, new THREE.Vector3(1, 0, 0));
       }
       
 

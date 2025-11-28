@@ -6,6 +6,8 @@ import { useAtomData } from "../../contexts/AtomDataContext";
 import { generateFirstShell } from "../../engine/visuals/atoms/electron_shells/firstShell";
 import { generateSecondShell } from "../../engine/visuals/atoms/electron_shells/secondShell";
 import { generateThirdShell } from "../../engine/visuals/atoms/electron_shells/thirdShell";
+import { generateFourthShell } from "../../engine/visuals/atoms/electron_shells/fourthShell";
+import { generateFifthShell } from "../../engine/visuals/atoms/electron_shells/fifthShell";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +53,7 @@ const AtomCanvas: React.FC = () => {
       45,
       width / height,
       0.1,
-      1000
+      100000
     );
     camera.position.z = 5;
 
@@ -77,7 +79,7 @@ const AtomCanvas: React.FC = () => {
     controls.enablePan = true;
     controls.enableZoom = true;
     controls.minDistance = 1;
-    controls.maxDistance = 200;
+    controls.maxDistance = 2000;
     controls.autoRotate = autoRotateEnabled;
     controls.autoRotateSpeed = 1;
     controls.target.set(0, 0, 0);
@@ -115,6 +117,30 @@ const AtomCanvas: React.FC = () => {
         camera.position.multiplyScalar(2.5); // zoom out 3p shells
       }
     }
+    if (electron >= 19) {
+      camera.position.multiplyScalar(1.5); // zoom out 4s shells
+      controls.update();
+      generateFourthShell(scene, electron, 50, orbitalMat);
+      if (electron >= 21) {
+        camera.position.multiplyScalar(1.8); // zoom out 3d shells
+      }
+      if (electron >= 31) {
+        camera.position.multiplyScalar(1.7); // zoom out 4p shells
+      }
+    } 
+    if (electron >= 37) {
+      camera.position.multiplyScalar(1.5); // zoom out 5s shells
+      controls.update();
+      generateFifthShell(scene, electron, 150, orbitalMat);
+      if (electron >= 39) {
+        camera.position.multiplyScalar(1.8); // zoom out 4d shells
+      }
+      if (electron >= 49) {
+        camera.position.multiplyScalar(1.7); // zoom out 5p shells
+      }
+    }
+
+    // sixth and seventh shells to be added later
 
 
     // Animation
