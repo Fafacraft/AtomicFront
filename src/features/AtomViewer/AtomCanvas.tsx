@@ -212,7 +212,7 @@ const AtomCanvas: React.FC = () => {
           {/* Shell toggles */}
           <div className="toggle-row">
             <div>
-              Shell Visbility : 
+              Shells Visibility : 
             </div>
             {[1, 2, 3, 4, 5, 6, 7].map(shell => (
               <ToggleBtn
@@ -229,7 +229,7 @@ const AtomCanvas: React.FC = () => {
           {/* Subshell toggles */}
           <div className="toggle-row">
             <div>
-              Subshells Visbility : 
+              Subshell types Visibility : 
             </div>
             {["s", "p", "d", "f"].map(sub => (
               <ToggleBtn

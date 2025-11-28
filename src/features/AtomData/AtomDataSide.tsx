@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";
+import AtomSymbol from "../../components/atomSymbol/AtomSymbol";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -26,10 +27,17 @@ const AtomDataSide: React.FC = () => {
     return () => clearTimeout(handler);
   }, [uiElectronText]);
 
+
   return (
     <aside className="atom-side">
       <div className="atom-header">
-        <div className="atom-title">Atom Data</div>
+        <div className="atom-title">
+          <AtomSymbol
+            proton={proton}
+            neutron={neutron}
+            electron={electron}
+          />
+        </div>
       </div>
 
       <div className="scroll">
