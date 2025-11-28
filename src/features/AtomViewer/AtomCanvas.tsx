@@ -8,6 +8,8 @@ import { generateSecondShell } from "../../engine/visuals/atoms/electron_shells/
 import { generateThirdShell } from "../../engine/visuals/atoms/electron_shells/thirdShell";
 import { generateFourthShell } from "../../engine/visuals/atoms/electron_shells/fourthShell";
 import { generateFifthShell } from "../../engine/visuals/atoms/electron_shells/fifthShell";
+import ToggleBtn from "../../components/ToggleBtn";
+import "./AtomCanvas.css";
 
 const AtomCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -15,6 +17,18 @@ const AtomCanvas: React.FC = () => {
   const [autoRotateEnabled, setAutoRotateEnabled] = useState(true);
   const autoRotateEnabledRef = useRef(autoRotateEnabled); // ref to hold the latest auto-rotate state
   const [reload, setReload] = useState(0); // state to trigger reloads
+
+  const [shellVisibility, setShellVisibility] = useState<Record<number, boolean>>({
+    1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true,
+  });
+
+  const [subVisibility, setSubVisibility] = useState<Record<string, boolean>>({
+    "s": true,
+    "p": true,
+    "d": true,
+    "f": true,
+  });
+
 
   // Get proton count from context
   const proton = useAtomData().proton;
@@ -36,7 +50,7 @@ const AtomCanvas: React.FC = () => {
     if (loaded) {
       setReload((prev) => prev + 1);
     }
-  }, [proton, neutron, electron, loaded]);
+  }, [proton, neutron, electron, loaded, shellVisibility, subVisibility]);
 
   // Loading and setting up the scene
   useEffect(() => {
@@ -95,53 +109,48 @@ const AtomCanvas: React.FC = () => {
 
     // Generate the atom
     generateNucleus(scene, proton, neutron);
-    camera.position.multiplyScalar(0.5); // zoom in on nucleus
+    camera.position.set(0, 0, 2); // zoom in on nucleus
 
     if (electron >= 1) {
-      camera.position.multiplyScalar(2); // zoom out 1s shell
-      generateFirstShell(scene, electron, 1.5, orbitalMat);
+      camera.position.set(0, 0, 5); // zoom out 1s shell
+      generateFirstShell(scene, electron, 1.5, orbitalMat, shellVisibility, subVisibility);
     }
     if (electron >= 3) {
-      camera.position.multiplyScalar(2.5); // zoom out 2s shells
-      controls.update();
-      generateSecondShell(scene, electron, 4, orbitalMat);
+      camera.position.set(0, 0, 12); // zoom out 2s shells
+      generateSecondShell(scene, electron, 4, orbitalMat, shellVisibility, subVisibility);
       if (electron >= 5) {
-        camera.position.multiplyScalar(2.5); // zoom out 2p shells
+        camera.position.set(0, 0, 32); // zoom out 2p shells
       }
     }
     if (electron >= 11) {
-      camera.position.multiplyScalar(1.5); // zoom out 3s shells
-      controls.update();
-      generateThirdShell(scene, electron, 15, orbitalMat);
+      camera.position.set(0, 0, 50); // zoom out 3s shells
+      generateThirdShell(scene, electron, 15, orbitalMat, shellVisibility, subVisibility);
       if (electron >= 13) {
-        camera.position.multiplyScalar(2.5); // zoom out 3p shells
+        camera.position.set(0, 0, 130); // zoom out 3p shells
       }
     }
     if (electron >= 19) {
       camera.position.multiplyScalar(1.5); // zoom out 4s shells
-      controls.update();
-      generateFourthShell(scene, electron, 50, orbitalMat);
+      generateFourthShell(scene, electron, 50, orbitalMat, shellVisibility, subVisibility);
       if (electron >= 21) {
-        camera.position.multiplyScalar(1.8); // zoom out 3d shells
+        camera.position.set(0, 0, 400); // zoom out 3d shells
       }
       if (electron >= 31) {
-        camera.position.multiplyScalar(1.7); // zoom out 4p shells
+        camera.position.set(0, 0, 700); // zoom out 4p shells
       }
-    } 
+    }
     if (electron >= 37) {
-      camera.position.multiplyScalar(1.5); // zoom out 5s shells
-      controls.update();
-      generateFifthShell(scene, electron, 150, orbitalMat);
+      camera.position.set(0, 0, 700); // zoom out 5s shells
+      generateFifthShell(scene, electron, 150, orbitalMat, shellVisibility, subVisibility);
       if (electron >= 39) {
-        camera.position.multiplyScalar(1.8); // zoom out 4d shells
+        camera.position.set(0, 0, 1000); // zoom out 4d shells
       }
       if (electron >= 49) {
-        camera.position.multiplyScalar(1.7); // zoom out 5p shells
+        camera.position.set(0, 0, 1700); // zoom out 5p shells
       }
     }
 
     // sixth and seventh shells to be added later
-
 
     // Animation
     const animate = () => {
@@ -190,12 +199,51 @@ const AtomCanvas: React.FC = () => {
   return (
     <div className="viewer">
       <div className="canvas-container" ref={mountRef}>
-        <div
-          className="viewport-toggle"
-          onClick={() => setAutoRotateEnabled(!autoRotateEnabled)}
-        >
-          {autoRotateEnabled ? "⏸ Stop" : "▶ Play"}
+        <div className="toggle-container">
+
+          {/* Autorotate toggle */}
+          <div
+            className="viewport-toggle"
+            onClick={() => setAutoRotateEnabled(!autoRotateEnabled)}
+          >
+            {autoRotateEnabled ? "⏸ Stop" : "▶ Play"}
+          </div>
+
+          {/* Shell toggles */}
+          <div className="toggle-row">
+            <div>
+              Shell Visbility : 
+            </div>
+            {[1, 2, 3, 4, 5, 6, 7].map(shell => (
+              <ToggleBtn
+                key={shell}
+                label={`${shell}`}
+                active={shellVisibility[shell]}
+                onClick={() =>
+                  setShellVisibility(prev => ({ ...prev, [shell]: !prev[shell] }))
+                }
+              />
+            ))}
+          </div>
+
+          {/* Subshell toggles */}
+          <div className="toggle-row">
+            <div>
+              Subshells Visbility : 
+            </div>
+            {["s", "p", "d", "f"].map(sub => (
+              <ToggleBtn
+                key={sub}
+                label={sub}
+                active={subVisibility[sub]}
+                onClick={() =>
+                  setSubVisibility(prev => ({ ...prev, [sub]: !prev[sub] }))
+                }
+              />
+            ))}
+          </div>
         </div>
+
       </div>
     </div>
   );
