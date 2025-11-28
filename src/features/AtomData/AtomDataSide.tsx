@@ -3,6 +3,7 @@ import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";
 import AtomSymbol from "../../components/atomSymbol/AtomSymbol";
+import AtomName from "../../components/atomName/AtomName";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -33,6 +34,11 @@ const AtomDataSide: React.FC = () => {
       <div className="atom-header">
         <div className="atom-title">
           <AtomSymbol
+            proton={proton}
+            neutron={neutron}
+            electron={electron}
+          />
+          <AtomName
             proton={proton}
             neutron={neutron}
             electron={electron}
