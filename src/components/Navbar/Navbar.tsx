@@ -1,8 +1,13 @@
-import React from "react";
-import "./Navbar.css"; /* optional if you want separate CSS; global styles already support .navbar */
+import React, { useState } from "react";
+import "./Navbar.css";
+import { LoginModal } from "../LoginModal/LoginModal";
 
 export const Navbar: React.FC = () => {
+  const [authOpen, setAuthOpen] = useState(false);  
+  const [signup, setSignup] = useState(false);
+
   return (
+    
     <header className="navbar">
       <div className="brand">
         <span className="logo" />
@@ -17,9 +22,15 @@ export const Navbar: React.FC = () => {
       </nav>
 
       <div className="nav-actions">
-        <button className="btn">Login</button>
-        <button className="btn primary">Sign up</button>
+        <button className="btn" onClick={() => { setAuthOpen(true); setSignup(false); }}>Login</button>
+        <button className="btn primary" onClick={() => { setAuthOpen(true); setSignup(true); }}>Sign up</button>
       </div>
+      <LoginModal
+        open={authOpen}
+        isSignup={signup}
+        onClose={() => setAuthOpen(false)}
+        onToggleSignup={() => setSignup(!signup)}
+      />
     </header>
   );
 };
