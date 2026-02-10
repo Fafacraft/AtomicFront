@@ -59,4 +59,53 @@ async function registerUser({
   return data;
 }
 
-export { registerUser };
+async function loginUser({
+  User_Email,
+  User_Password,
+}: {
+  User_Email: string;
+  User_Password: string;
+}) {
+  const response = await fetch(env.backServiceUrl + "/api/secure/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-service-token": env.backServiceToken,
+    },
+    body: JSON.stringify({ User_Email, User_Password }),
+  });
+
+  if (!response.ok) {
+    const bodyText = await response.text();
+    let errBody: any;
+    try {
+      errBody = bodyText ? JSON.parse(bodyText) : null;
+    } catch {
+      errBody = { message: bodyText || "Login failed" };
+    }
+
+    const message = errBody?.message || `Login failed (status ${response.status})`;
+    const err: any = new Error(message);
+    err.status = response.status;
+    err.body = errBody;
+    throw err;
+  }
+
+  const data = await response.json();
+
+  // API returns { user: {...}, accessToken: "..." }
+  if (data?.accessToken) {
+    sessionStorage.setItem("authToken", data.accessToken);
+  }
+  if (data?.user) {
+    try {
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+    } catch {
+      // ignore
+    }
+  }
+
+  return data;
+}
+
+export { loginUser, registerUser };

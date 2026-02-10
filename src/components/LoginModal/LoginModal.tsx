@@ -1,7 +1,7 @@
 import React from "react";
 import "./LoginModal.css";
 import { useState } from "react";
-import { registerUser } from "./LoginModalLogic";
+import { registerUser, loginUser } from "./LoginModalLogic";
 
 type Props = {
   open: boolean;
@@ -29,12 +29,17 @@ export const LoginModal: React.FC<Props> = ({
     setError(null);
 
     try {
-      await registerUser({ username, email, password });
+      if (isSignup) {
+        await registerUser({ username, email, password });
+      } else {
+        // login: backend accepts email or username in the same field
+        await loginUser({ User_Email: username, User_Password: password });
+      }
       onClose(); // close modal
     } catch (err: any) {
       console.error(err);
-      // show backend message when available (e.g. 409 -> "Email already used")
-      const message = err?.message || (err?.body?.message) || "Registration failed";
+      // show backend message when available
+      const message = err?.message || (err?.body?.message) || (err?.body?.text) || "Operation failed";
       setError(message);
     }
     };
