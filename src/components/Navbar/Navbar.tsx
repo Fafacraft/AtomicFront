@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Navbar.css";
+import "./navbar.css";
 import { LoginModal } from "../LoginModal/LoginModal";
 import { env } from "../../config/env.js";
 import { verifyAuth } from "../../contexts/UserHelper.js";
