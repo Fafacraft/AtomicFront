@@ -60,11 +60,11 @@ async function registerUser({
 }
 
 async function loginUser({
-  User_Email,
-  User_Password,
+  username,
+  password,
 }: {
-  User_Email: string;
-  User_Password: string;
+  username: string;
+  password: string;
 }) {
   const response = await fetch(env.backServiceUrl + "/api/secure/login", {
     method: "POST",
@@ -72,8 +72,8 @@ async function loginUser({
       "Content-Type": "application/json",
       "x-service-token": env.backServiceToken,
     },
-    body: JSON.stringify({ User_Email, User_Password }),
-  });
+    body: JSON.stringify({ User_Email: username, User_Password: password }),
+    });
 
   if (!response.ok) {
     const bodyText = await response.text();

@@ -33,7 +33,7 @@ export const LoginModal: React.FC<Props> = ({
         await registerUser({ username, email, password });
       } else {
         // login: backend accepts email or username in the same field
-        await loginUser({ User_Email: username, User_Password: password });
+        await loginUser({ username, password });
       }
       onClose(); // close modal
     } catch (err: any) {
