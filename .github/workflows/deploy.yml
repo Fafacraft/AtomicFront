@@ -1,0 +1,45 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 51.210.11.74
+          username: ubuntu
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/fafa/AtomicBack
+
+            echo "📥 Pulling latest code for backend..."
+            git pull origin main
+
+            echo "📦 Installing backend deps..."
+            npm install
+
+            echo "📥 Pulling latest code for frontend..."
+            cd ../AtomicFront
+            git pull origin main
+
+            echo "📦 Installing frontend deps..."
+            npm install
+
+            echo "🏗️ Building frontend..."
+            npm run build
+
+            echo "🔄 Restarting apps with PM2..."
+            pm2 restart atomicback || pm2 start npm --name atomicback -- run dev
+            pm2 restart atomicfront || pm2 start serve --name atomicfront -- -s dist -l 5173
+
+            pm2 save
+
+            echo "✅ Deployment complete"
