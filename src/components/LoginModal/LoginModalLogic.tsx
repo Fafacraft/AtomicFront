@@ -1,4 +1,5 @@
 import { env } from "../../config/env.js";
+import { handleBadResponse } from "../../utils/http.js";
 
 async function registerUser({
   username,
@@ -23,23 +24,7 @@ async function registerUser({
     }),
   });
 
-  if (!response.ok) {
-    // Read body once as text, then try to parse as JSON.
-    const bodyText = await response.text();
-    let errBody: any;
-    try {
-      errBody = bodyText ? JSON.parse(bodyText) : null;
-    } catch {
-      errBody = { message: bodyText || "Registration failed" };
-    }
-
-    const message = errBody?.message || "Registration failed";
-    const err: any = new Error(message);
-    err.status = response.status;
-    err.body = errBody;
-
-    throw err;
-  }
+  await handleBadResponse(response, "Registration failed");
 
   const data = await response.json();
 
@@ -75,21 +60,7 @@ async function loginUser({
     body: JSON.stringify({ User_Email: username, User_Password: password }),
     });
 
-  if (!response.ok) {
-    const bodyText = await response.text();
-    let errBody: any;
-    try {
-      errBody = bodyText ? JSON.parse(bodyText) : null;
-    } catch {
-      errBody = { message: bodyText || "Login failed" };
-    }
-
-    const message = errBody?.message || `Login failed (status ${response.status})`;
-    const err: any = new Error(message);
-    err.status = response.status;
-    err.body = errBody;
-    throw err;
-  }
+  await handleBadResponse(response, "Login failed");
 
   const data = await response.json();
 

@@ -5,6 +5,8 @@ import RangeControl from "../../components/slider";
 import AtomSymbol from "../../components/atomSymbol/AtomSymbol";
 import AtomName from "../../components/atomName/AtomName";
 import { env } from "../../config/env";
+import { handleBadResponse } from "../../utils/http";
+import { getStability } from "./AtomDataSideLogic";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -34,36 +36,6 @@ const AtomDataSide: React.FC = () => {
     const handler = setTimeout(async () => { setStability(await getStability(proton, neutron)); }, 300);
     return () => clearTimeout(handler);
   }, [proton, neutron]);
-
-  const getStability = async (proton: number, neutron: number): Promise<string> => {
-    const response = await fetch(env.backServiceUrl + "/api/atom/stability?proton=" + proton + "&neutron=" + neutron, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-service-token": env.backServiceToken,
-      },
-    });
-
-    if (!response.ok) {
-      const bodyText = await response.text();
-      let errBody: any;
-      try {
-        errBody = bodyText ? JSON.parse(bodyText) : null;
-      } catch {
-        errBody = { message: bodyText || "Failed to get stability information" };
-      }
-
-      const message = errBody?.message || `Failed to get stability information (status ${response.status})`;
-      const err: any = new Error(message);
-      err.status = response.status;
-      err.body = errBody;
-      throw err;
-    }
-
-    const data = await response.json();
-    return data.stability; // API returns { stability: "Stable" } or similar
-  }
-
 
   return (
     <aside className="atom-side">
