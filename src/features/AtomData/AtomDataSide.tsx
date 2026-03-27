@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";
@@ -6,7 +6,7 @@ import AtomSymbol from "../../components/atomSymbol/AtomSymbol";
 import AtomName from "../../components/atomName/AtomName";
 import { env } from "../../config/env";
 import { handleBadResponse } from "../../utils/http";
-import { getStability } from "./AtomDataSideLogic";
+import { getStability, getStabilityColor } from "./AtomDataSideLogic";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -15,6 +15,8 @@ const AtomDataSide: React.FC = () => {
   const [uiNeutronText, setUiNeutronText] = useState(1);
   const [uiElectronText, setUiElectronText] = useState(1);
   const [stability, setStability] = useState<string>("—");
+  const [stabilityLoading, setStabilityLoading] = useState(false);
+  const [stabilityColor, setStabilityColor] = useState("white");
   const { proton, setProton, neutron, setNeutron, electron, setElectron } = useAtomData();
 
   useEffect(() => {
@@ -33,9 +35,19 @@ const AtomDataSide: React.FC = () => {
   }, [uiElectronText]);
 
   useEffect(() => {
-    const handler = setTimeout(async () => { setStability(await getStability(proton, neutron)); }, 300);
+    setStabilityLoading(true);
+    setStabilityColor("white");
+    setStability("—");
+    const handler = setTimeout(async () => { 
+      setStability(await getStability(proton, neutron));
+      setStabilityLoading(false);
+    }, 300);
     return () => clearTimeout(handler);
   }, [proton, neutron]);
+
+  useEffect(() => {
+    setStabilityColor(getStabilityColor(stability));
+  }, [stability]);
 
   return (
     <aside className="atom-side">
@@ -110,7 +122,9 @@ const AtomDataSide: React.FC = () => {
 
         <div className="data-row">
           <div className="label">Half Life</div>
-          <div className="value">{stability}</div>
+          <div className="value" style={{ color: stabilityColor}}>
+            {stability}
+          </div>
         </div>
 
         <div className="data-row">
