@@ -4,6 +4,7 @@ import { LoginModal } from "../LoginModal/LoginModal";
 import { env } from "../../config/env.js";
 import { verifyAuth } from "../../contexts/UserHelper.js";
 import { useAuthData } from "../../contexts/AuthDataContext.js";
+import logo from "../../../assets/AtomicLogo.png";
 
 export const Navbar: React.FC = () => {
   const {authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected} = useAuthData();
@@ -30,7 +31,7 @@ export const Navbar: React.FC = () => {
     
     <header className="navbar">
       <div className="brand">
-        <span className="logo" />
+        <img src={logo} className="logo" alt="Atomic Logo"/>
         <span>Atomic</span>
       </div>
 
