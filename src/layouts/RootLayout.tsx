@@ -3,21 +3,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar.tsx";
 
 export default function RootLayout() {
-
-  const SliderContext = React.createContext({
-    value: 0,
-    setValue: (v: number) => { }
-  });
-
-  const Provider: React.FC = ({ children }) => {
-    const [value, setValue] = useState(3);
-    return (
-      <SliderContext.Provider value={{ value, setValue }}>
-        {children}
-      </SliderContext.Provider>
-    );
-  };
-
   return (
     <div className="app-root">
       <Navbar />
@@ -29,3 +14,4 @@ export default function RootLayout() {
     </div>
   );
 }
+

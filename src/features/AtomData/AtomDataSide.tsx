@@ -7,6 +7,7 @@ import AtomName from "../../components/atomName/AtomName";
 import { env } from "../../config/env";
 import { handleBadResponse } from "../../utils/http";
 import { getStability, getStabilityColor } from "./AtomDataSideLogic";
+import Navbar from "../../components/Navbar/Navbar";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -109,10 +110,16 @@ const AtomDataSide: React.FC = () => {
           />
 
           <div className="control-buttons">
-            <button className="btn" onClick={() => onSimulate?.()}>
-              Refresh
+            <button className="btn" onClick={() => {
+              if(loggedIn) {
+              // Save logic here
+              } else {
+                Navbar.setAuthOpen(true); // Open login/signup modal from Navbar context
+              }
+            }}>
+              Save
             </button>
-            <button className="btn">Export</button>
+            <button className="btn">Ask AI</button>
           </div>
         </div>
 
