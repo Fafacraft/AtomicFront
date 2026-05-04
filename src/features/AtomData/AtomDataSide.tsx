@@ -41,6 +41,12 @@ const AtomDataSide: React.FC = () => {
   }, [uiElectronText]);
 
   useEffect(() => {
+    setUiProtonText(proton);
+    setUiNeutronText(neutron);
+    setUiElectronText(electron);
+  }, [proton, neutron, electron]);
+
+  useEffect(() => {
     setStabilityLoading(true);
     setStabilityColor("white");
     setStability("—");
