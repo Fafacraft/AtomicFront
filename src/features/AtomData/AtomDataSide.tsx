@@ -8,6 +8,7 @@ import { env } from "../../config/env";
 import { handleBadResponse } from "../../utils/http";
 import { getStability, getStabilityColor } from "./AtomDataSideLogic";
 import Navbar from "../../components/Navbar/Navbar";
+import { useAuthData } from "../../contexts/AuthDataContext";
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -19,6 +20,7 @@ const AtomDataSide: React.FC = () => {
   const [stabilityLoading, setStabilityLoading] = useState(false);
   const [stabilityColor, setStabilityColor] = useState("white");
   const { proton, setProton, neutron, setNeutron, electron, setElectron } = useAtomData();
+  const {authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected} = useAuthData();
 
   useEffect(() => {
     const handler = setTimeout(() => setProton(uiProtonText), 300);
@@ -111,10 +113,10 @@ const AtomDataSide: React.FC = () => {
 
           <div className="control-buttons">
             <button className="btn" onClick={() => {
-              if(loggedIn) {
+              if (isConnected) {
               // Save logic here
               } else {
-                Navbar.setAuthOpen(true); // Open login/signup modal from Navbar context
+                setAuthOpen(true); // Open login/signup modal from AuthData context
               }
             }}>
               Save

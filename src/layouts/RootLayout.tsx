@@ -8,12 +8,12 @@ export default function RootLayout() {
     <div className="app-root">
       <AuthDataProvider>
         <Navbar />
-      </AuthDataProvider>
 
-      {/* The current page goes here */}
-      <main>
-        <Outlet />
-      </main>
+        {/* The current page goes here */}
+        <main>
+          <Outlet />
+        </main>
+      </AuthDataProvider>
     </div>
   );
 }
