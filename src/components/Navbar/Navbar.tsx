@@ -3,15 +3,12 @@ import "./navbar.css";
 import { LoginModal } from "../LoginModal/LoginModal";
 import { env } from "../../config/env.js";
 import { verifyAuth } from "../../contexts/UserHelper.js";
+import { useAuthData } from "../../contexts/AuthDataContext.js";
 
 export const Navbar: React.FC = () => {
-  const [authOpen, setAuthOpen] = useState(false);  
-  const [signup, setSignup] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const {authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected} = useAuthData();
 
  
-
   useEffect(() => {
     // on mount, check for token
     const token = sessionStorage.getItem("authToken");
