@@ -27,6 +27,7 @@ body {
 .main-area {
   display: grid;
   grid-template-columns: 1fr clamp(220px, 30vw, 360px);
+  background: linear-gradient(180deg, var(--bg-900), var(--bg-800));
   gap: 20px;
   padding: 20px;
   height: calc(100vh - 64px - 64px); /* top navbar + bottom bar height */
