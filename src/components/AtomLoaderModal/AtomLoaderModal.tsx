@@ -9,6 +9,7 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
 
 
     const [allAtomData, setAllAtomData] = useState<any[]>([]);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     // Load atoms when modal opens, from backend
     useEffect(() => {
@@ -24,7 +25,7 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
         };
 
         load();
-    }, [open]);
+    }, [open, refreshKey]);
 
     return (
         <div className="atom-modal-overlay" onClick={() => onClose()}>
@@ -40,11 +41,12 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
                     {allAtomData.map((atom, index) => (
                         <AtomLoaderModalItem
                             key={index}
-                            id={index}
+                            id={atom.Atom_Id}
                             name={atom.Atom_name ?? "Unnamed Atom"}
                             proton={atom.Atom_proton}
                             neutron={atom.Atom_neutron}
-                            electron={atom.Atom_electron} />
+                            electron={atom.Atom_electron}
+                            onDeleted={() => setRefreshKey((prev) => prev + 1)} />
                     ))}
                 </div>
 
