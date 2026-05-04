@@ -1,9 +1,31 @@
 import { AtomLoaderModalItem } from "./AtomLoaderModalItem";
 import "./AtomLoaderModal.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { GetAllAtomsForUser } from "./AtomLoaderModalLogic";
+import { all } from "three/tsl";
 
 export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     if (!open) return null;
+
+
+    const [allAtomData, setAllAtomData] = useState<any[]>([]);
+
+    // Load atoms when modal opens, from backend
+    useEffect(() => {
+        if (!open) return;
+
+        const load = async () => {
+            const user = JSON.parse(sessionStorage.getItem("user") || "null");
+            if (!user) return;
+
+            const data = await GetAllAtomsForUser(user);
+            setAllAtomData(data);
+            console.log(data);
+        };
+
+        load();
+    }, [open]);
+
     return (
         <div className="atom-modal-overlay" onClick={() => onClose()}>
             <div className="atom-modal" onClick={(e) => e.stopPropagation()}>
@@ -11,13 +33,18 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
                 {/* Header */}
                 <div className="atom-modal-header">
                     <h2>Your Atoms</h2>
-                    <button className="close-btn">✕</button>
                 </div>
 
                 {/* Grid */}
                 <div className="atom-grid">
-                    {[...Array(12)].map((_, i) => (
-                        <AtomLoaderModalItem key={i} id={i} name={`Atom ${i + 1}`} proton={1} neutron={0} electron={1} />
+                    {allAtomData.map((atom, index) => (
+                        <AtomLoaderModalItem
+                            key={index}
+                            id={index}
+                            name={atom.Atom_name ?? "Unnamed Atom"}
+                            proton={atom.Atom_proton}
+                            neutron={atom.Atom_neutron}
+                            electron={atom.Atom_electron} />
                     ))}
                 </div>
 
