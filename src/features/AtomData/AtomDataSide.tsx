@@ -3,12 +3,15 @@ import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";
 import AtomSymbol from "../../components/atomSymbol/AtomSymbol";
-import AtomName from "../../components/atomName/AtomName";
-import { env } from "../../config/env";
-import { handleBadResponse } from "../../utils/http";
 import { getStability, getStabilityColor } from "./AtomDataSideLogic";
-import Navbar from "../../components/Navbar/Navbar";
 import { useAuthData } from "../../contexts/AuthDataContext";
+import { SaveAtom } from "./SaveAtom";
+import atomNames from "../../engine/constants/atomNames";
+
+const getAtomName = (proton: number, neutron: number, electron: number) => {
+  return `${atomNames[proton]} ${proton + neutron} ${proton - electron !== 0 ? "ion" : ""}`;
+}
+
 
 const AtomDataSide: React.FC = () => {
   const [electrons, setElectrons] = useState(1);
@@ -61,11 +64,9 @@ const AtomDataSide: React.FC = () => {
             neutron={neutron}
             electron={electron}
           />
-          <AtomName
-            proton={proton}
-            neutron={neutron}
-            electron={electron}
-          />
+          <div className="atom-name">
+            {getAtomName(proton, neutron, electron)}
+          </div>
         </div>
       </div>
 
@@ -113,8 +114,8 @@ const AtomDataSide: React.FC = () => {
 
           <div className="control-buttons">
             <button className="btn" onClick={() => {
-              if (isConnected) {
-              // Save logic here
+              if (isConnected && sessionStorage.getItem("user")) {
+                SaveAtom(JSON.parse(sessionStorage.getItem("user")), proton, neutron, electron, getAtomName(proton, neutron, electron)); // Call save function with user and atom data
               } else {
                 setAuthOpen(true); // Open login/signup modal from AuthData context
               }

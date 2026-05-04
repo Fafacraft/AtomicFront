@@ -17,6 +17,8 @@ export const Navbar: React.FC = () => {
       try {
         const ok = await verifyAuth(token);
         setIsConnected(Boolean(ok));
+        const userData = sessionStorage.getItem("user");
+        setUser(userData ? JSON.parse(userData) : null);
       } catch {
         setIsConnected(false);
       }

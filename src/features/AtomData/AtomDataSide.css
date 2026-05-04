@@ -14,6 +14,10 @@
   transition: width var(--transition);
 }
 
+.atom-name {
+    font-size: 20px;
+}
+
 
 /* Header */
 .atom-header {
