@@ -61,6 +61,8 @@
 
 /* Card */
 .atom-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
   background: linear-gradient(145deg, #1e293b, #0f172a);
   border-radius: 12px;
   padding: 12px;

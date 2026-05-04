@@ -2,11 +2,11 @@ import { AtomLoaderModalItem } from "./AtomLoaderModalItem";
 import "./AtomLoaderModal.css";
 import React, { useEffect, useState } from "react";
 import { GetAllAtomsForUser } from "./AtomLoaderModalLogic";
-import { all } from "three/tsl";
+
+
 
 export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
     if (!open) return null;
-
 
     const [allAtomData, setAllAtomData] = useState<any[]>([]);
     const [refreshKey, setRefreshKey] = useState(0);
@@ -21,7 +21,6 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
 
             const data = await GetAllAtomsForUser(user);
             setAllAtomData(data);
-            console.log(data);
         };
 
         load();
@@ -46,7 +45,8 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
                             proton={atom.Atom_proton}
                             neutron={atom.Atom_neutron}
                             electron={atom.Atom_electron}
-                            onDeleted={() => setRefreshKey((prev) => prev + 1)} />
+                            onRefresh={() => setRefreshKey((prev) => prev + 1)}
+                            onClose={() => onClose()} />
                     ))}
                 </div>
 

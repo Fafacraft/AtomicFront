@@ -12,11 +12,6 @@ const HomePage: React.FC = () => {
   const [neutrons, setNeutrons] = useState(0);
   const [electrons, setElectrons] = useState(1);
 
-  const handleSimulate = () => {
-    // placeholder - will call your backend or wasm simulation later
-    console.log("Simulate atom", { protons, neutrons, electrons });
-    // e.g. fetch('/api/simulate', { method: 'POST', body: JSON.stringify({...})})
-  };
 
   return (
     <div className="app-shell">
@@ -35,7 +30,6 @@ const HomePage: React.FC = () => {
               setProtons={setProtons}
               setNeutrons={setNeutrons}
               setElectrons={setElectrons}
-              onSimulate={handleSimulate}
             />
           </div>
         <BottomBar />
