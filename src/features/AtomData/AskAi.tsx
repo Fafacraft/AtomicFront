@@ -20,7 +20,9 @@ export const askAi = async function askAi(proton: number, neutron: number, elect
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            // gemini-3.1-flash-lite-preview has more requests but less detailed
+            // gemini-3-flash-preview has less requests but more detailed
+            model: "gemini-3.1-flash-lite-preview", 
             contents: base_prompt + `Tell me about ${atomName} (protons: ${proton}, neutrons: ${neutron}, electrons: ${electron}).`,
         });
 

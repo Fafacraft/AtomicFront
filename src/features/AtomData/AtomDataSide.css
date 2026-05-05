@@ -129,7 +129,4 @@
   color: var(--muted-200, #aaaaff);
 }
 
-.notes-spacer {
-  height: 600px; /* temporary for scrollbar demo */
-}
 
