@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";
@@ -7,6 +7,9 @@ import { getStability, getStabilityColor } from "./AtomDataSideLogic";
 import { useAuthData } from "../../contexts/AuthDataContext";
 import { SaveAtom } from "./SaveAtom";
 import atomNames from "../../engine/constants/atomNames";
+import { askAi } from "./AskAi";
+import renderMathInElement from "katex/contrib/auto-render";
+import "katex/dist/katex.min.css";
 
 const getAtomName = (proton: number, neutron: number, electron: number) => {
   return `${atomNames[proton]} ${proton + neutron} ${proton - electron !== 0 ? "ion" : ""}`;
@@ -22,8 +25,11 @@ const AtomDataSide: React.FC = () => {
   const [stability, setStability] = useState<string>("—");
   const [stabilityLoading, setStabilityLoading] = useState(false);
   const [stabilityColor, setStabilityColor] = useState("white");
+  const [aiResponse, setAiResponse] = useState("Click 'Ask AI' to get information.");
+  const [aiResponseLoading, setAiResponseLoading] = useState(false);
+  const [aiResponseLoadingDots, setAiResponseLoadingDots] = useState("");
   const { proton, setProton, neutron, setNeutron, electron, setElectron } = useAtomData();
-  const {authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected} = useAuthData();
+  const { authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected } = useAuthData();
 
   useEffect(() => {
     const handler = setTimeout(() => setProton(uiProtonText), 300);
@@ -44,13 +50,16 @@ const AtomDataSide: React.FC = () => {
     setUiProtonText(proton);
     setUiNeutronText(neutron);
     setUiElectronText(electron);
+    // Reset AI response and / or stop loading when atom changes
+    setAiResponseLoading(false);
+    setAiResponse("Click 'Ask AI' to get information.");
   }, [proton, neutron, electron]);
 
   useEffect(() => {
     setStabilityLoading(true);
     setStabilityColor("white");
     setStability("—");
-    const handler = setTimeout(async () => { 
+    const handler = setTimeout(async () => {
       setStability(await getStability(proton, neutron));
       setStabilityLoading(false);
     }, 300);
@@ -60,6 +69,31 @@ const AtomDataSide: React.FC = () => {
   useEffect(() => {
     setStabilityColor(getStabilityColor(stability));
   }, [stability]);
+
+  const aiResponseRef = useRef(null);
+
+  // Render math in AI response using KaTeX
+  useEffect(() => {
+    if (aiResponseRef.current) {
+      renderMathInElement(aiResponseRef.current, {
+        delimiters: [
+          { left: "$", right: "$", display: false },
+          { left: "$$", right: "$$", display: true },
+        ],
+      });
+    }
+  }, [aiResponse]);
+
+  // AI response loading dots effect
+  useEffect(() => {
+    if (!aiResponseLoading) return;
+
+    const interval = setInterval(() => {
+      setAiResponseLoadingDots(prev => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [aiResponseLoading]);
 
   return (
     <aside className="atom-side">
@@ -128,7 +162,14 @@ const AtomDataSide: React.FC = () => {
             }}>
               Save
             </button>
-            <button className="btn">Ask AI</button>
+            <button className={`btn ${aiResponseLoading ? 'disabled-btn' : ''}`} onClick={async () => {
+              if (aiResponseLoading) return; // Prevent multiple clicks while loading
+              setAiResponseLoading(true);
+              setAiResponse("");
+              const response = await askAi(proton, neutron, electron, getAtomName(proton, neutron, electron));
+              setAiResponse(response);
+              setAiResponseLoading(false);
+            }}>Ask AI</button>
           </div>
         </div>
 
@@ -138,7 +179,7 @@ const AtomDataSide: React.FC = () => {
 
         <div className="data-row">
           <div className="label">Half Life</div>
-          <div className="value" style={{ color: stabilityColor}}>
+          <div className="value" style={{ color: stabilityColor }}>
             {stability}
           </div>
         </div>
@@ -154,10 +195,12 @@ const AtomDataSide: React.FC = () => {
         </div>
 
         <div className="notes">
-          <div className="notes-title">Notes</div>
-          <div className="notes-content">
-            This area will show calculated properties, electron shell helpers,
-            and AI info. Scroll independently while the 3D view stays fixed.
+          <div className="notes-title">AI</div>
+          <div className="notes-content" ref={aiResponseRef}>
+            {aiResponseLoading
+              ? `Asking AI${aiResponseLoadingDots}`
+              : <div dangerouslySetInnerHTML={{ __html: aiResponse }} />
+            }
           </div>
           <div className="notes-spacer" />
         </div>

@@ -3,4 +3,6 @@
 export const env = {
   backServiceToken: import.meta.env.VITE_BACK_SERVICE_TOKEN,
   backServiceUrl: import.meta.env.VITE_BACK_SERVICE_URL,
+
+  geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY,
 };

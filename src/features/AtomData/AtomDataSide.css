@@ -92,6 +92,11 @@
   background-color: var(--accent-500, #7f5fff);
 }
 
+.disabled-btn {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* Separator */
 .separator {
   border: none;
