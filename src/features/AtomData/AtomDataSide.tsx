@@ -185,13 +185,13 @@ const AtomDataSide: React.FC = () => {
         </div>
 
         <div className="data-row">
-          <div className="label">Ionization</div>
-          <div className="value">—</div>
+          <div className="label">Neutons/Protons ratio</div>
+          <div className="value">{Math.round(neutron / proton * 100) / 100 || 0}</div>
         </div>
 
         <div className="data-row">
-          <div className="label">Electromagnetism</div>
-          <div className="value">—</div>
+          <div className="label">Electric charge</div>
+          <div className="value">{electron - proton}</div>
         </div>
 
         <div className="notes">
