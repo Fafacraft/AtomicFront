@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./AtomDataSide.css";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import RangeControl from "../../components/slider";

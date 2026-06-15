@@ -70,7 +70,7 @@ function generateNucleusPositions(N: number, particleRadius: number): Vec3[] {
       const neutronProportion = neutron / N;
 
       // for each position, create a proton or neutron sphere
-      positions.forEach((pos, _) => {
+      positions.forEach((pos) => {
         // Decide type based on which is closer to running out
         let type: "proton" | "neutron";
         if (protonRemaining === 0) type = "neutron";

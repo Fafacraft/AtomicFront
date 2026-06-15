@@ -17,12 +17,12 @@ export const LoginModal: React.FC<Props> = ({
   onToggleSignup
 }) => {
 
-    if (!open) return null;
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    if (!open) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

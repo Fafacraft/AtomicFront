@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
       }
     };
     check();
-  }, []);
+  });
 
   return (
     

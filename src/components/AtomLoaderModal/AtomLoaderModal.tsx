@@ -6,8 +6,6 @@ import { GetAllAtomsForUser } from "./AtomLoaderModalLogic";
 
 
 export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-    if (!open) return null;
-
     const [allAtomData, setAllAtomData] = useState<any[]>([]);
     const [refreshKey, setRefreshKey] = useState(0);
 
@@ -26,6 +24,8 @@ export const AtomLoaderModal = ({ open, onClose }: { open: boolean; onClose: () 
         load();
     }, [open, refreshKey]);
 
+    
+    if (!open) return null;
     return (
         <div className="atom-modal-overlay" onClick={() => onClose()}>
             <div className="atom-modal" onClick={(e) => e.stopPropagation()}>
