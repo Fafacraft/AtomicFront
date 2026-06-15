@@ -15,7 +15,6 @@ export const GetAllAtomsForUser = async (user: any) => {
     if (response.ok) {
         return data;
     } else {
-        console.log("Failed to fetch atoms:", data);
         alert("Failed to fetch atoms: " + data.message);
         await handleBadResponse(response, "Failed to fetch atoms");
     }

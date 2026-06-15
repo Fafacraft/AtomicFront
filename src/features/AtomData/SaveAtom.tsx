@@ -16,7 +16,6 @@ export const SaveAtom = async (user: any, proton: number, neutron: number, elect
     if (response.ok) {
         alert(`${atomName} saved successfully!`);
     } else {
-        console.log("Failed to save atom:", data);
         alert("Failed to save atom: " + data.message);
         await handleBadResponse(response, "Failed to save atom");
     }
