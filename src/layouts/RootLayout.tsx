@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar.tsx";
 import { AuthDataProvider } from "../contexts/AuthDataContext.tsx";

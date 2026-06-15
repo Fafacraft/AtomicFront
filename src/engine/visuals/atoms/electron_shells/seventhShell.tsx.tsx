@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { add } from "three/tsl";
 import { addSOrbitals } from "../electron_orbitals/SOrbitals";
 import { addFOrbitals } from "../electron_orbitals/Forbitals";
 import { addDOrbitals } from "../electron_orbitals/Dorbitals";

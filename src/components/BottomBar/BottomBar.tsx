@@ -5,7 +5,7 @@ import { useAuthData } from "../../contexts/AuthDataContext";
 const BottomBar: React.FC = () => {
   const [AtomLoaderModalOpen, setAtomLoaderModalOpen] = React.useState(false);
 
-  const { authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected } = useAuthData();
+  const { setAuthOpen, isConnected } = useAuthData();
 
   return (
     <div className="bottom-bar">

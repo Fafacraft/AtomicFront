@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import "./navbar.css";
 import { LoginModal } from "../LoginModal/LoginModal";
-import { env } from "../../config/env.js";
 import { verifyAuth } from "../../contexts/UserHelper.js";
 import { useAuthData } from "../../contexts/AuthDataContext.js";
 import logo from "../../../assets/AtomicLogo.png";
 
 export const Navbar: React.FC = () => {
-  const {authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected} = useAuthData();
+  const {authOpen, setAuthOpen, signup, setSignup, setUser, isConnected, setIsConnected} = useAuthData();
 
  
   useEffect(() => {

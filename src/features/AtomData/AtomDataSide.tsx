@@ -17,19 +17,17 @@ const getAtomName = (proton: number, neutron: number, electron: number) => {
 
 
 const AtomDataSide: React.FC = () => {
-  const [electrons, setElectrons] = useState(1);
-  const [onSimulate, setOnSimulate] = useState<() => void>();
   const [uiProtonText, setUiProtonText] = useState(1);
   const [uiNeutronText, setUiNeutronText] = useState(1);
   const [uiElectronText, setUiElectronText] = useState(1);
   const [stability, setStability] = useState<string>("—");
-  const [stabilityLoading, setStabilityLoading] = useState(false);
+  const [setStabilityLoading] = useState(false);
   const [stabilityColor, setStabilityColor] = useState("white");
   const [aiResponse, setAiResponse] = useState("Click 'Ask AI' to get information.");
   const [aiResponseLoading, setAiResponseLoading] = useState(false);
   const [aiResponseLoadingDots, setAiResponseLoadingDots] = useState("");
   const { proton, setProton, neutron, setNeutron, electron, setElectron } = useAtomData();
-  const { authOpen, setAuthOpen, signup, setSignup, user, setUser, isConnected, setIsConnected } = useAuthData();
+  const { setAuthOpen,  isConnected } = useAuthData();
 
   useEffect(() => {
     const handler = setTimeout(() => setProton(uiProtonText), 300);

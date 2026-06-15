@@ -22,7 +22,7 @@ function generateNucleusPositions(N: number, particleRadius: number): Vec3[] {
   // 2. relaxation iterations
   for (let iter = 0; iter < iterations; iter++) {
     for (let i = 0; i < N; i++) {
-      let [x, y, z] = positions[i];
+      const [x, y, z] = positions[i];
       let dx = 0, dy = 0, dz = 0;
 
       for (let j = 0; j < N; j++) {
@@ -66,11 +66,11 @@ function generateNucleusPositions(N: number, particleRadius: number): Vec3[] {
 
       let protonRemaining = proton;
       let neutronRemaining = neutron;
-      let protonProportion = proton / N;
-      let neutronProportion = neutron / N;
+      const protonProportion = proton / N;
+      const neutronProportion = neutron / N;
 
       // for each position, create a proton or neutron sphere
-      positions.forEach((pos, i) => {
+      positions.forEach((pos, _) => {
         // Decide type based on which is closer to running out
         let type: "proton" | "neutron";
         if (protonRemaining === 0) type = "neutron";

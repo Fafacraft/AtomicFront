@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, use } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { generateNucleus, generateNucleusPositions } from "../../engine/visuals/atoms/NucleusEngine";
+import { generateNucleus } from "../../engine/visuals/atoms/NucleusEngine";
 import { useAtomData } from "../../contexts/AtomDataContext";
 import { generateFirstShell } from "../../engine/visuals/atoms/electron_shells/firstShell";
 import { generateSecondShell } from "../../engine/visuals/atoms/electron_shells/secondShell";
@@ -59,7 +59,7 @@ const AtomCanvas: React.FC = () => {
     const mount = mountRef.current;
     if (!mount) return;
 
-    var { width, height } = getViewSize(mount);
+    const { width, height } = getViewSize(mount);
 
     // Scene
     const scene = new THREE.Scene();
@@ -196,8 +196,8 @@ const AtomCanvas: React.FC = () => {
 
     // Function to get view size
     function getViewSize(mount: HTMLDivElement) {
-      var width = mount.clientWidth;
-      var height = window.innerHeight * 0.6;
+      let width = mount.clientWidth;
+      let height = window.innerHeight * 0.6;
       if (window.innerWidth < 450) {
         width = window.innerWidth * 0.925;
         height = window.innerHeight * 0.6;

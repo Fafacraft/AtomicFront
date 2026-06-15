@@ -19,7 +19,6 @@ const RangeControl: React.FC<RangeControlProps> = ({
     max = 100,
     step = 1,
     value,
-    showValue = true,
     onChange,
     className = "",
 }) => {

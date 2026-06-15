@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { add } from "three/tsl";
 import { addSOrbitals } from "../electron_orbitals/SOrbitals";
 
 // Function to generate first electron shell (1s orbital)
